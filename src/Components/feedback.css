@@ -1,0 +1,607 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+ 
+ 
+ 
+  .app-container {
+ 
+  min-height: 100vh;
+ 
+  background-color: #0F172A; /* CHANGED: Very Dark Slate Blue */
+ 
+  display: flex;
+ 
+  flex-direction: column;
+ 
+  align-items: center;
+ 
+  padding: 1.5rem 1rem;
+ 
+  font-family: 'Inter', sans-serif;
+ 
+  }
+ 
+ 
+ 
+  .feedback-card {
+ 
+  width: 100%;
+ 
+  max-width: 800px;
+ 
+  background-color: #1E293B; /* CHANGED: Dark Slate Blue Card Background */
+ 
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+ 
+  border-radius: 0.75rem;
+ 
+  padding: 2.5rem;
+ 
+  }
+ 
+ 
+ 
+  /* --- Header Styles --- */
+ 
+  .header-title {
+ 
+  font-size: 2.25rem;
+ 
+  font-weight: 800;
+ 
+  color: #F1F5F9; /* Off-white text */
+ 
+  text-align: center;
+ 
+  margin-bottom: 0.5rem;
+ 
+  }
+ 
+ 
+ 
+  .header-subtitle {
+ 
+  font-size: 1.125rem;
+ 
+  color: #94A3B8; /* CHANGED: Slate-400 for subtle subtitle */
+ 
+  text-align: center;
+ 
+  margin-top: 0.5rem;
+ 
+  margin-bottom: 2rem; /* ADDED: Space below subtitle */
+ 
+  }
+ 
+ 
+ 
+  .user-id {
+ 
+  font-size: 0.75rem;
+ 
+  color: #9ca3af; /* Subtler grey */
+ 
+  text-align: center;
+ 
+  margin-top: 0.25rem;
+ 
+  }
+ 
+ 
+ 
+  .user-id span {
+ 
+  font-family: monospace;
+ 
+  color: #9ca3af; /* Subtler grey for ID string */
+ 
+  }
+ 
+ 
+ 
+  /* --- Form Section --- */
+ 
+  .form-section {
+ 
+  margin-bottom: 3rem;
+ 
+  border: 1px solid #334155; /* CHANGED: Mid Slate border for contrast */
+ 
+  border-radius: 0.5rem;
+ 
+  padding: 1.5rem;
+ 
+  background-color: #1E293B; /* CHANGED: Match card background */
+ 
+  }
+ 
+ 
+ 
+  .form-title {
+ 
+  font-size: 1.5rem;
+ 
+  font-weight: 600;
+ 
+  color: #F1F5F9; /* Off-white on dark background */
+ 
+  margin-bottom: 1rem;
+ 
+  }
+ 
+ 
+ 
+  .form-group {
+ 
+  margin-bottom: 1.5rem;
+ 
+  }
+ 
+ 
+ 
+  .form-label {
+ 
+  display: block;
+ 
+  font-size: 0.875rem;
+ 
+  font-weight: 500;
+ 
+  color: #F1F5F9; /* CHANGED: Off-white for form labels */
+ 
+  margin-bottom: 0.25rem;
+ 
+  }
+ 
+ 
+ 
+  /* Input, Textarea, Select Base Style */
+ 
+  .form-input, .form-textarea, .form-select {
+ 
+  display: block;
+ 
+  width: 100%;
+ 
+  padding: 0.9rem 0.10rem;
+ 
+  border: 1px solid #334155; /* CHANGED: Mid Slate border for contrast */
+ 
+  border-radius: 0.5rem;
+ 
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+ 
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+ 
+  color: #1f2937; /* Dark text inside input fields (kept dark for readability) */
+ 
+  }
+ 
+ 
+ 
+  .form-input:focus, .form-textarea:focus, .form-select:focus {
+ 
+  border-color: #94A3B8; /* CHANGED: Slate focus ring */
+ 
+  box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.5); /* Semi-transparent light slate shadow */
+ 
+  outline: none;
+ 
+  }
+ 
+ 
+ 
+  /* Category select background colors (remain for visual separation) */
+ 
+  .form-select.category-tag-green { background-color: #d1fae5; color: #065f46; border-color: 
+#a7f3d0; }
+ 
+  .form-select.category-tag-red { background-color: #fee2e2; color: #991b1b; border-color: 
+#fecaca; }
+ 
+  .form-select.category-tag-yellow { background-color: #fffbeb; color: #92400e; border-color: 
+#fde68a; }
+ 
+  .form-select.category-tag-pink { background-color: #fce7f6; color: #9d174d; border-color: 
+#fbcfe8; }
+ 
+  .form-select.category-tag-indigo { background-color: #e0e7ff; color: #3730a3; border-color: 
+#c7d2fe; }
+ 
+  .form-select.category-tag-general { background-color: #e5e7eb; color: #374151; border-color: 
+#9ca3af; }
+ 
+ 
+ 
+ 
+ 
+  /* --- Star Rating --- */
+ 
+  .star-rating {
+ 
+  display: flex;
+ 
+  gap: 0.25rem;
+ 
+  }
+ 
+ 
+ 
+  .star-button {
+ 
+  font-size: 1.875rem;
+ 
+  transition: color 0.2s;
+ 
+  background: none;
+ 
+  border: none;
+ 
+  cursor: pointer;
+ 
+  color: #94A3B8; /* CHANGED: Slate mid-grey inactive */
+ 
+  padding: 0;
+ 
+  line-height: 1;
+ 
+  }
+ 
+ 
+ 
+  .star-button.active {
+ 
+  color: #facc15; /* CHANGED: Golden Yellow for active stars */
+ 
+  }
+ 
+ 
+ 
+  .star-button:hover:not(.active) {
+ 
+  color: #fcd34d; /* Lighter yellow hover */
+ 
+  }
+ 
+  /* --- Submission Button --- */
+ 
+  .submit-container {
+ 
+  display: flex;
+ 
+  flex-direction: column;
+ 
+  align-items: flex-start;
+ 
+  justify-content: space-between;
+ 
+  gap: 1rem;
+ 
+  }
+ 
+ 
+ 
+  .submit-button {
+ 
+  width: 100%;
+ 
+  padding: 0.75rem 1.5rem;
+ 
+  border: none;
+ 
+  font-size: 1rem;
+ 
+  font-weight: 500;
+ 
+  border-radius: 0.5rem;
+ 
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+ 
+  color: #0F172A; /* CHANGED: Very dark text on light button */
+ 
+  background-color: #3B82F6; /* CHANGED: Vibrant Blue Button */
+ 
+  transition: background-color 0.3s, transform 0.1s;
+ 
+  cursor: pointer;
+ 
+  }
+ 
+ 
+ 
+  .submit-button:hover {
+ 
+  background-color: #60A5FA; /* CHANGED: Lighter Blue */
+ 
+  transform: scale(1.01);
+ 
+  }
+ 
+ 
+ 
+  .submit-button:disabled {
+ 
+  background-color: #475569; /* Slate-600 disabled */
+ 
+  cursor: not-allowed;
+ 
+  box-shadow: none;
+ 
+  }
+ 
+ 
+ 
+  .status-message {
+ 
+  font-size: 0.875rem;
+ 
+  font-weight: 600;
+ 
+  }
+ 
+ 
+ 
+  .status-message.success {
+ 
+  color: #F1F5F9; /* Off-white for success message */
+ 
+  }
+ 
+ 
+ 
+  .status-message.error {
+ 
+  color: #F1F5F9; /* Off-white for error message */
+ 
+  }
+ 
+ 
+ 
+ 
+ 
+  /* --- Feedback List --- */
+ 
+  .list-header {
+ 
+  font-size: 1.5rem;
+ 
+  font-weight: 600;
+ 
+  color: #F1F5F9; /* Off-white on dark background */
+ 
+  margin-bottom: 1.5rem;
+ 
+  padding-bottom: 0.5rem;
+ 
+  border-bottom: 1px solid #334155;
+ 
+  }
+ 
+ 
+ 
+  .feedback-list {
+ 
+  display: flex;
+ 
+  flex-direction: column;
+ 
+  gap: 1.5rem;
+ 
+  }
+ 
+ 
+ 
+  .feedback-list-item {
+ 
+  padding: 1rem;
+ 
+  border: 1px solid #334155;
+ 
+  border-radius: 0.5rem;
+ 
+  background-color: #1E293B; /* CHANGED: Match card background */
+ 
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+ 
+  transition: box-shadow 0.3s;
+ 
+  }
+ 
+ 
+ 
+  .feedback-list-item:hover {
+ 
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+ 
+  }
+ 
+ 
+ 
+  .list-item-header {
+ 
+  display: flex;
+ 
+  justify-content: space-between;
+ 
+  align-items: flex-start;
+ 
+  margin-bottom: 0.5rem;
+ 
+  }
+ 
+ 
+ 
+  .list-item-meta {
+ 
+  display: flex;
+ 
+  align-items: center;
+ 
+  }
+ 
+ 
+ 
+  .list-item-name {
+ 
+  font-weight: 700;
+ 
+  font-size: 1.125rem;
+ 
+  color: #F1F5F9; /* Off-white on dark background */
+ 
+  }
+ 
+ 
+ 
+  .list-item-date {
+ 
+  font-size: 0.875rem;
+ 
+  color: #94A3B8; /* Slate-400 subtle grey */
+ 
+  white-space: nowrap;
+ 
+  }
+ 
+ 
+ 
+  .list-item-stars {
+ 
+  font-size: 0.875rem;
+ 
+  color: #94A3B8; /* Slate mid grey inactive */
+ 
+  margin-left: 0.75rem;
+ 
+  }
+ 
+ 
+ 
+  .list-item-stars span {
+ 
+  font-size: 1.25rem;
+ 
+  }
+ 
+ 
+ 
+  .list-item-stars .active-star {
+ 
+  color: #3B82F6; /* CHANGED: Vibrant Blue for active stars in the list */
+ 
+  }
+ 
+ 
+ 
+  .list-item-comment {
+ 
+  color: #F1F5F9; /* Off-white */
+ 
+  font-style: italic;
+ 
+  border-left: 4px solid #94A3B8; /* Subtle slate highlight for comment border */
+ 
+  padding-left: 0.75rem;
+ 
+  padding-top: 0.25rem;
+ 
+  padding-bottom: 0.25rem;
+ 
+  }
+ 
+ 
+ 
+  /* --- Category Tags in List (No change, need to keep original colors for category distinction) --- */
+ 
+  .category-tag {
+ 
+  margin-left: 0.75rem;
+ 
+  padding: 0.25rem 0.75rem;
+ 
+  font-size: 0.75rem;
+ 
+  font-weight: 600;
+ 
+  border-radius: 9999px; /* rounded-full */
+ 
+  border-width: 1px;
+ 
+  white-space: nowrap;
+ 
+  }
+ 
+ 
+ 
+  /* Category Colors */
+ 
+  .category-tag-green { background-color: #d1fae5; color: #065f46; border-color: #a7f3d0; }
+ 
+  .category-tag-red { background-color: #fee2e2; color: #991b1b; border-color: #fecaca; }
+ 
+  .category-tag-yellow { background-color: #fffbeb; color: #92400e; border-color: #fde68a; }
+ 
+  .category-tag-pink { background-color: #fce7f6; color: #9d174d; border-color: #fbcfe8; }
+ 
+  .category-tag-indigo { background-color: #e0e7ff; color: #3730a3; border-color: #c7d2fe; }
+ 
+  .category-tag-general { background-color: #e5e7eb; color: #374151; border-color: #9ca3af; }
+ 
+ 
+ 
+ 
+ 
+  .empty-list-message {
+ 
+  text-align: center;
+ 
+  color: #F1F5F9; /* Off-white */
+ 
+  padding: 1.5rem;
+ 
+  background-color: #1E293B; /* Match card background */
+ 
+  border-radius: 0.5rem;
+ 
+  }
+ 
+ 
+ 
+  /* --- Media Queries for Responsiveness (Mobile First) --- */
+ 
+  @media (min-width: 640px) {
+ 
+  .app-container {
+ 
+  padding: 2rem 1rem;
+ 
+  }
+ 
+ 
+ 
+  .feedback-card {
+ 
+  padding: 2.5rem;
+ 
+  }
+ 
+ 
+ 
+  .submit-container {
+ 
+  flex-direction: row;
+ 
+  align-items: center;
+ 
+  }
+ 
+ 
+ 
+  .submit-button {
+ 
+  width: 100%;
+  align-self: center;
+ 
+  }
+ 
+  }
+ 

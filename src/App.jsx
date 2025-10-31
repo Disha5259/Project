@@ -4,6 +4,7 @@ import Header from "./Components/Header";
 import Card from "./Components/Card";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
+import Feedbackform from "./Components/Feedbackform"; 
 import "./index.css";
 
 
@@ -17,7 +18,7 @@ gu: "gu_voice_id_placeholder",
 ta: "ta_voice_id_placeholder",
 };
 
-const AppContent = () => {
+const AppContent = () => {  
 const location = useLocation();
 const navigate = useNavigate();
 
@@ -80,7 +81,7 @@ isLoggedIn={isLoggedIn}
 const App = () => (
 <BrowserRouter>
 <AppContent />
-
+<Feedbackform/>
 </BrowserRouter>
 );
 

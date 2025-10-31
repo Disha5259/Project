@@ -1,264 +1,210 @@
-import React, { useState, useEffect } from 'react';
-import { getAuth, signInAnonymously } from 'firebase/auth';
-import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp } from 'firebase/firestore';
- // ✅ Import your Firebase app
+import React, { useState, useEffect } from "react";
+import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  serverTimestamp,
+} from "firebase/firestore";
+import { app, auth, db } from "./FirebaseConfig"; // ✅ Correct import
+import "./Feedback.css"; // ✅ your existing styles
 
-const categories = [
-'General',
-'Content Quality',
-'Performance/Speed',
-'UI/Design',
-'Bug Report',
-'Feature Request'
-];
+const FeedbackForm = () => {
+  const [userId, setUserId] = useState("");
+  const [isAuthReady, setIsAuthReady] = useState(false);
 
-// --- Helper Components ---
-const StarRating = ({ rating, setRating }) => {
-return (
-<div className="star-rating">
-{[...Array(5)].map((_, index) => {
-const starValue = index + 1;
-return (
-<button
-key={index}
-type="button"
-onClick={() => setRating(starValue)}
-className={`star-button ${starValue <= rating ? 'active' : ''}}
-aria-label={Rate ${starValue} stars`}
->
-★
-</button>
-);
-})}
-</div>
-);
-};
+  const [name, setName] = useState("");
+  const [rating, setRating] = useState(0);
+  const [feedbackType, setFeedbackType] = useState("UI/Design");
+  const [description, setDescription] = useState("");
+  const [feedbackList, setFeedbackList] = useState([]);
+  const [status, setStatus] = useState("");
 
-export default function App() {
-const [db, setDb] = useState(null);
-const [auth, setAuth] = useState(null);
-const [userId, setUserId] = useState(null);
-const [isAuthReady, setIsAuthReady] = useState(false);
+  // ⭐ Firebase Auth setup
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      try {
+        if (user) {
+          setUserId(user.uid);
+        } else {
+          const result = await signInAnonymously(auth);
+          setUserId(result.user.uid);
+        }
+      } catch (error) {
+        console.error("Auth Error:", error);
+      } finally {
+        setIsAuthReady(true);
+      }
+    });
 
-const [formData, setFormData] = useState({
-name: '',
-rating: 5,
-comment: '',
-category: 'General'
-});
+    return () => unsubscribe();
+  }, []);
 
-const [submissionStatus, setSubmissionStatus] = useState('');
-const [isLoading, setIsLoading] = useState(false);
-const [feedbackList, setFeedbackList] = useState([]);
+  // ⭐ Fetch all feedback
+  useEffect(() => {
+    const q = query(collection(db, "feedback"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const feedbacks = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setFeedbackList(feedbacks.sort((a, b) => b.timestamp - a.timestamp));
+    });
+    return () => unsubscribe();
+  }, []);
 
-// ✅ Initialize Firestore & Anonymous Login
-useEffect(() => {
-try {
-const firestoreDb = getFirestore(app);
-const firebaseAuth = getAuth(app);
-setDb(firestoreDb);
-setAuth(firebaseAuth);
+  // ⭐ Submit feedback
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
-    if (user) {
-      setUserId(user.uid);
-    } else {
-      await signInAnonymously(firebaseAuth);
+    if (!name.trim() || rating === 0 || !description.trim()) {
+      setStatus("Please fill all required fields ⭐");
+      return;
     }
-    setIsAuthReady(true);
-  });
 
-  return () => unsubscribe();
-} catch (error) {
-  console.error("Error initializing Firebase:", error);
-}
+    try {
+      await addDoc(collection(db, "feedback"), {
+        name,
+        rating,
+        feedbackType,
+        description,
+        userId,
+        timestamp: serverTimestamp(),
+      });
 
+      setName("");
+      setRating(0);
+      setFeedbackType("UI/Design");
+      setDescription("");
+      setStatus("✅ Feedback submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      setStatus("❌ Failed to submit feedback. Try again!");
+    }
+  };
 
-}, []);
-
-// ✅ Real-time Feedback Fetch
-useEffect(() => {
-if (!db || !isAuthReady) return;
-
-const feedbackCollectionRef = collection(db, "feedback");
-const feedbackQuery = query(feedbackCollectionRef);
-
-const unsubscribe = onSnapshot(feedbackQuery, (snapshot) => {
-  const fetchedFeedback = snapshot.docs
-    .map(doc => ({ id: doc.id, ...doc.data() }))
-    .sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
-  setFeedbackList(fetchedFeedback);
-});
-
-return () => unsubscribe();
-
-
-}, [db, isAuthReady]);
-
-const handleChange = (e) => {
-const { name, value } = e.target;
-setFormData(prev => ({ ...prev, [name]: value }));
-};
-
-const handleRatingChange = (newRating) => {
-setFormData(prev => ({ ...prev, rating: newRating }));
-};
-
-// ✅ Final Submit Handler
-const handleSubmit = async (e) => {
-e.preventDefault();
-if (!db || !userId) {
-setSubmissionStatus("Error: Database not ready or user not authenticated.");
-return;
-}
-if (formData.comment.length < 5) {
-setSubmissionStatus("Please provide a more detailed comment.");
-return;
-}
-
-setIsLoading(true);
-const feedbackData = {
-  ...formData,
-  userId,
-  createdAt: serverTimestamp(),
-};
-
-try {
-  await addDoc(collection(db, "feedback"), feedbackData);
-  setSubmissionStatus("Thank you for your feedback! It has been posted.");
-  setFormData({ name: '', rating: 5, comment: '', category: 'General' });
-  setTimeout(() => setSubmissionStatus(''), 5000);
-} catch (error) {
-  console.error("Error adding document:", error);
-  setSubmissionStatus("Error submitting feedback. Please try again.");
-} finally {
-  setIsLoading(false);
-}
-
-
-};
-
-const getCategoryClass = (category) => {
-switch (category) {
-case 'Content Quality': return 'category-tag-green';
-case 'Performance/Speed': return 'category-tag-red';
-case 'UI/Design': return 'category-tag-yellow';
-case 'Bug Report': return 'category-tag-pink';
-case 'Feature Request': return 'category-tag-indigo';
-default: return 'category-tag-general';
-}
-};
-
-return (
-<div className="feedback-card">
-<header>
-<h1 className="header-title">NewsRush Feedback</h1>
-<p className="header-subtitle">We value your thoughts! Help us improve your news experience.</p>
+  return (
+    <div className="app-container">
+      <div className="feedback-card">
+       <header>
+<h1 className="header-title">Give Us Feedback</h1>
+<p className="header-subtitle">
+Help us improve NewsRush — report a bug or suggest a new feature
+</p>
 </header>
 
-  <section className="form-section">
-    <h2 className="form-title">Share Your Feedback</h2>
-    <form onSubmit={handleSubmit} className="form">
-      <div className="form-group">
-        <label htmlFor="name" className="form-label">Your Name</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="e.g., A Satisfied Reader"
-          className="form-input"
-        />
-      </div>
-
-      <div className="form-group">
-        <label className="form-label">
-          Overall Rating: <span style={{ fontWeight: 700, color: '#F1F5F9' }}>{formData.rating} / 5</span>
-        </label>
-        <StarRating rating={formData.rating} setRating={handleRatingChange} />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="category" className="form-label">Feedback Category</label>
-        <select
-          id="category"
-          name="category"
-          value={formData.category}
-          onChange={handleChange}
-          required
-          className={`form-select ${getCategoryClass(formData.category)}`}
-        >
-          {categories.map(cat => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="comment" className="form-label">Your Comments (Required)</label>
-        <textarea
-          id="comment"
-          name="comment"
-          rows="4"
-          value={formData.comment}
-          onChange={handleChange}
-          required
-          placeholder="What did you like or what can we improve?"
-          className="form-textarea"
-        ></textarea>
-      </div>
-
-      <div className="submit-container">
-        <button type="submit" disabled={isLoading || !isAuthReady} className="submit-button">
-          {isLoading ? 'Submitting...' : 'Submit Feedback'}
-        </button>
-        {submissionStatus && (
-          <p className={`status-message ${submissionStatus.startsWith('Error') ? 'error' : 'success'}`}>
-            {submissionStatus}
-          </p>
-        )}
-      </div>
-    </form>
-  </section>
-
-  <section>
-    <h2 className="list-header">What Others Are Saying ({feedbackList.length})</h2>
-    <div className="feedback-list">
-      {feedbackList.length === 0 && (
-        <p className="empty-list-message">No feedback has been submitted yet. Be the first!</p>
-      )}
-      {feedbackList.map((feedback) => (
-        <div key={feedback.id} className="feedback-list-item">
-          <div className="list-item-header">
-            <div className="list-item-meta">
-              <p className="list-item-name">{feedback.name || 'Anonymous User'}</p>
-              {feedback.category && (
-                <span className={`category-tag ${getCategoryClass(feedback.category)}`}>
-                  {feedback.category}
-                </span>
-              )}
-              <div className="list-item-stars">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className={i < (feedback.rating || 0) ? 'active-star' : ''}>
-                    &#9733;
-                  </span>
-                ))}
-              </div>
-            </div>
-            <span className="list-item-date">
-              {feedback.createdAt && feedback.createdAt.seconds
-                ? new Date(feedback.createdAt.seconds * 1000).toLocaleDateString()
-                : 'N/A'}
-            </span>
+        <form onSubmit={handleSubmit} className="form-section">
+          {/* Name */}
+          <div className="form-group">
+            <label className="form-label">Your Name</label>
+            <input
+              type="text"
+              className="form-input"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your name"
+            />
           </div>
-          <p className="list-item-comment">{feedback.comment}</p>
+
+          {/* Rating */}
+          <div className="form-group">
+            <label className="form-label">Your Rating (Required)</label>
+            <div className="star-rating">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  type="button"
+                  key={star}
+                  className={`star-button ${star <= rating ? "active" : ""}`}
+                  onClick={() => setRating(star)}
+                >
+                  ★
+                </button>
+              ))}
+              <span style={{ color: "#f1f5f9", marginLeft: "0.5rem" }}>
+                {rating > 0 ? `${rating}/5` : ""}
+              </span>
+            </div>
+          </div>
+
+          {/* Feedback Type */}
+          <div className="form-group">
+            <label className="form-label">Type of Feedback</label>
+            <select
+              className="form-select"
+              value={feedbackType}
+              onChange={(e) => setFeedbackType(e.target.value)}
+            >
+              <option value="UI/Design">Genral</option>
+              <option value="UI/Design">UI/Design</option>
+              <option value="Feature Request">Feature Request</option>
+              <option value="Bug Report">Bug Report</option>
+              <option value="Performance">Performance</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          {/* Description */}
+          <div className="form-group">
+            <label className="form-label">Description</label>
+            <textarea
+              className="form-textarea"
+              rows="4"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Write your feedback..."
+            />
+          </div>
+
+          {/* Submit */}
+          <div className="submit-container">
+            <button
+              type="submit"
+              className="submit-button"
+              disabled={!isAuthReady}
+            >
+              Submit Feedback
+            </button>
+            {status && <p className="status-message success">{status}</p>}
+          </div>
+        </form>
+
+        {/* Feedback List */}
+        <div className="list-section">
+          <h2 className="list-header">Recent Feedback</h2>
+          {feedbackList.length === 0 ? (
+            <div className="empty-list-message">No feedback yet.</div>
+          ) : (
+            <div className="feedback-list">
+              {feedbackList.map((fb) => (
+                <div key={fb.id} className="feedback-list-item">
+                  <div className="list-item-header">
+                    <span className="list-item-name">{fb.name}</span>
+                    <span className="list-item-date">
+                      {fb.timestamp?.toDate
+                        ? fb.timestamp.toDate().toLocaleString()
+                        : "Just now"}
+                    </span>
+                  </div>
+                  <div className="list-item-stars">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <span
+                        key={i}
+                        className={i < fb.rating ? "active-star" : ""}
+                      >
+                        ★
+                      </span>
+                    ))}
+                  </div>
+                  <p className="list-item-comment">{fb.description}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      ))}
+      </div>
     </div>
-  </section>
-</div>
+  );
+};
 
-
-);
-}
+export default FeedbackForm;
