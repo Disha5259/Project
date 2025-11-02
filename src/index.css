@@ -1,25 +1,20 @@
+/* ===================================================
+   🌐 GLOBAL STYLES
+   =================================================== */
+
 body {
-  
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background-color:#393646;
- 
+  background-color: #393646;
+  
+  color: white;
 }
 
-/* Main app wrapper: center all content */
-/* .app {
-  
-  display: flex;
-  flex-direction: column;
-  align-items: center;
- 
+/* ===================================================
+   🧭 HEADER SECTION
+   =================================================== */
 
-/* HEADER WRAPPER */
-
-
-/* Top Section */
-/* Overall header container */
 .header {
   background-color: #0f172a;
   color: white;
@@ -33,7 +28,6 @@ body {
   align-items: center;
 }
 
-/* Top Row: logo + search + login/lang */
 .header-top {
   width: 100%;
   display: flex;
@@ -54,11 +48,10 @@ body {
 .search-bar {
   display: flex;
   align-items: center;
- background-color: #393646;
+  background-color: #393646;
   border-radius: 30px;
   padding: 6px 12px;
-  width: 46%;
-  
+  width: 44%;
 }
 
 .search-input {
@@ -122,19 +115,20 @@ body {
   font-size: 0.9rem;
 }
 
-/* Category buttons below header */
+/* ===================================================
+   🧭 NAVIGATION BUTTONS
+   =================================================== */
+
 .nav-buttons {
-  
- display: flex;
- justify-content: center;
- gap: 30px;
- flex-wrap: wrap;
- margin-right: 53px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-right: 50px;
 }
 
 .nav-button {
- 
-   background-color:#393646 ;
+  background-color: #393646;
   color: white;
   border: none;
   padding: 10px 15px;
@@ -149,52 +143,44 @@ body {
   color: #fff;
 }
 
-/* Loader + error text */
-.status {
-  text-align: center;
-  padding: 20px;
-  color: #ddd;
-}
-.status.error {
-  color: #ff5c5c;
-}
+/* ===================================================
+   📦 MAIN CONTENT / CARDS
+   =================================================== */
 
-/* Main Content Area */
 .main-content {
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 22px;
-  width: 95vw;
+  width: 100vw;
 }
-/* --- Cards Grid Layout --- */
+
 .cards-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;   /* center the row */
-  align-items: stretch;      /* all cards same height */
+  justify-content: center;
+  align-items: stretch;
   gap: 28px;
-  margin-top: 60px;
+  margin-top: 30px;
   width: 100%;
   padding: 0 20px;
-  background: grey;
+  background-color: #393646;
 }
 
-/* --- Individual Card --- */
+/* Card */
 .card {
-  flex: 1 1 300px;           /* responsive base width */
-  max-width: 330px;
-  background-color: #EBD9D1;
+  flex: 1 1 300px;
+  background-color: #ebd9d1;
   border-radius: 19px;
   border: 1.5px solid #eee;
   box-shadow: 0 2.5px 7px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* ensures footer at bottom */
+  justify-content: space-between;
   overflow: hidden;
 }
 
-/* Image Section */
+/* Card Image */
 .card img {
   width: 100%;
   height: 180px;
@@ -210,7 +196,6 @@ body {
   padding: 10px 14px;
 }
 
-/* Title */
 .card-title {
   font-weight: 600;
   font-size: 18px;
@@ -222,7 +207,6 @@ body {
   border-bottom: 1.5px solid #393646;
 }
 
-/* Description */
 .card-desc {
   flex: 1;
   font-size: 15px;
@@ -235,7 +219,7 @@ body {
   -webkit-box-orient: vertical;
 }
 
-/* Bottom Buttons */
+/* Card Buttons */
 .card-actions {
   display: flex;
   justify-content: space-between;
@@ -243,7 +227,6 @@ body {
   margin-top: auto;
 }
 
-/* Buttons */
 .speak-btn,
 .readmore-btn {
   background-color: #393646;
@@ -269,179 +252,164 @@ body {
 .speaker-icon {
   font-size: 16px;
 }
-/* Signup css */
+
+/* ===================================================
+   🧍 SIGNUP PAGE
+   =================================================== */
+
 .signup-container {
-background-color: #0f172a;
-color: #f1f5f9;
-display: flex;
-justify-content: center;
-align-items: center;
-height: 100vh;
-font-family: "Poppins", sans-serif;
+  background-color: #0f172a;
+  color: #f1f5f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .signup-card {
-background-color: #1e293b;
-padding: 2.5rem;
-border-radius: 16px;
-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-width: 100%;
-max-width: 380px;
-text-align: center;
+  background-color: #1e293b;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
 }
 
 .signup-title {
-font-size: 1.8rem;
-font-weight: 600;
-color: #ffffff;
-margin-bottom: 0.3rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 0.3rem;
 }
 
 .signup-subtitle {
-color: #94a3b8;
-font-size: 0.95rem;
-margin-bottom: 1.5rem;
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
 }
 
-/* ==== Inputs ==== */
+/* Inputs */
 .input-group {
-margin-bottom: 1rem;
-text-align: left;
+  margin-bottom: 1rem;
+  text-align: left;
 }
 
 .input-group label {
-display: block;
-margin-bottom: 0.4rem;
-font-size: 0.9rem;
-color: #cbd5e1;
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  color: #cbd5e1;
 }
 
 .input-group input {
-width: 100%;
-padding: 0.6rem 0.8rem;
-background-color: #334155;
-border: none;
-border-radius: 8px;
-color: #f1f5f9;
-font-size: 0.95rem;
-outline: none;
-transition: all 0.2s ease;
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  background-color: #334155;
+  border: none;
+  border-radius: 8px;
+  color: #f1f5f9;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s ease;
 }
 
 .input-group input:focus {
-background-color: #475569;
-box-shadow: 0 0 0 2px #22c55e;
+  background-color: #475569;
+  box-shadow: 0 0 0 2px #22c55e;
 }
 
-/* ==== Buttons ==== */
+/* Button */
 .signup-button {
-width: 100%;
-padding: 0.75rem;
-background-color: #22c55e;
-color: white;
-font-weight: 600;
-font-size: 1rem;
-border: none;
-border-radius: 8px;
-cursor: pointer;
-transition: background-color 0.25s;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #22c55e;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.25s;
 }
 
 .signup-button:hover {
-background-color: #16a34a;
+  background-color: #16a34a;
 }
 
 .signup-button:disabled {
-opacity: 0.6;
-cursor: not-allowed;
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
-/* ==== Message ==== */
 .message {
-margin-top: 0.8rem;
-font-size: 0.9rem;
-color: #22c55e;
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+  color: #22c55e;
 }
 
 .message.error {
-color: #f87171;
+  color: #f87171;
 }
 
-/* ==== Switch Text ==== */
 .switch-text {
-color: #94a3b8;
-margin-top: 1rem;
-font-size: 0.9rem;
+  color: #94a3b8;
+  margin-top: 1rem;
+  font-size: 0.9rem;
 }
 
 .switch-link {
-background: none;
-border: none;
-color: #22c55e;
-font-weight: 600;
-cursor: pointer;
-text-decoration: underline;
+  background: none;
+  border: none;
+  color: #22c55e;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
-/* ==== Welcome Screen ==== */
-.welcome-screen {
-height: 100vh;
-background-color: #0f172a;
-color: #22c55e;
-display: flex;
-justify-content: center;
-align-items: center;
-font-size: 2rem;
-font-weight: 700;
-animation: fadeInOut 2s ease-in-out;
-}
+/* ===================================================
+   🔐 LOGIN PAGE
+   =================================================== */
 
-@keyframes fadeInOut {
-0% { opacity: 0; transform: scale(0.9); }
-20% { opacity: 1; transform: scale(1); }
-80% { opacity: 1; transform: scale(1); }
-100% { opacity: 0; transform: scale(0.9); }
-}
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 
-/* Login css */
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
-  .app-container {
+.app-container {
   min-height: 100vh;
-  background-color: #0F172A; /* Very Dark Slate Blue */
+  background-color: #0f172a;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 1.5rem 1rem;
-  font-family: 'Inter', sans-serif;
-  }
-  .auth-card {
+  font-family: "Inter", sans-serif;
+}
+
+.auth-card {
   width: 100%;
-  max-width: 400px; /* Smaller card for auth forms */
-  background-color: #1E293B; /* Dark Slate Blue Card Background */
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  background-color: #1e293b;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3),
+    0 10px 10px -5px rgba(0, 0, 0, 0.1);
   border-radius: 0.75rem;
   padding: 2.5rem 1.5rem;
   text-align: center;
-  }
-    /* --- Header Styles --- */
-  .header-title {
+}
+
+.header-title {
   font-size: 2rem;
   font-weight: 800;
-  color: #F1F5F9; /* Off-white text */
+  color: #f1f5f9;
   margin-bottom: 0.5rem;
-  }
-  .header-subtitle {
+}
+
+.header-subtitle {
   font-size: 1rem;
-  color: #94A3B8; /* Slate-400 for subtle subtitle */
+  color: #94a3b8;
   margin-top: 0.5rem;
   margin-bottom: 2rem;
-  }
-form-group {
-  margin-bottom: 1rem;
-  text-align: left;
-  }
- /* Form Container */
+}
+
+/* Form */
 .form-container {
   width: 100%;
   max-width: 400px;
@@ -451,37 +419,32 @@ form-group {
   align-items: center;
 }
 
-/* Each field wrapper */
 .form-group {
   width: 100%;
   margin-bottom: 1rem;
 }
 
-/* Label Style */
 .form-label {
   display: block;
   letter-spacing: 1px;
   font-size: 0.9rem;
   font-weight: 500;
-  color: #F1F5F9;
+  color: #f1f5f9;
   margin-bottom: 0.4rem;
   text-align: left;
 }
 
-/* Input Style */
 .form-input {
-
   width: 100%;
   padding: 0.85rem 0.95rem;
   border-radius: 0.5rem;
   border: none;
   font-size: 0.95rem;
-  box-sizing: border-box;
   background-color: #f8fafc;
   color: #0f172a;
 }
 
-/* Submit Button */
+/* Submit */
 .submit-button {
   width: 100%;
   padding: 0.9rem;
@@ -489,10 +452,10 @@ form-group {
   border: none;
   font-size: 1rem;
   font-weight: 600;
-  color: #0F172A;
-  background-color: #3B82F6;
+  color: #0f172a;
+  background-color: #3b82f6;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2),
-              0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    0 2px 4px -2px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s, transform 0.1s;
   cursor: pointer;
 }
@@ -502,42 +465,178 @@ form-group {
   transform: scale(1.01);
 }
 
-
-    .submit-button:hover:not(:disabled) {
-  background-color: #60A5FA; /* Lighter Blue */
-  transform: scale(1.01);
-  }
-  .submit-button:disabled {
-  background-color: #475569; /* Slate-600 disabled */
+.submit-button:disabled {
+  background-color: #475569;
   cursor: not-allowed;
   box-shadow: none;
-  }
-/* --- Messages and Links --- */
-  .status-message {
+}
+
+/* Messages */
+.status-message {
   font-size: 0.875rem;
   font-weight: 500;
   margin-top: 1rem;
-  min-height: 1.25rem; /* Reserve space */
-  }
-  .status-message.error {
-  color: #F87171; /* Red-400 for errors */
-  }
-  .status-message.success {
-  color: #4ADE80; /* Green-400 for success */
-  }
-  .switch-mode-link {
+  min-height: 1.25rem;
+}
+
+.status-message.error {
+  color: #f87171;
+}
+
+.status-message.success {
+  color: #4ade80;
+}
+
+.switch-mode-link {
   display: block;
   margin-top: 1.5rem;
-    font-size: 0.875rem;
-  color: #94A3B8;
+  font-size: 0.875rem;
+  color: #94a3b8;
   cursor: pointer;
   transition: color 0.2s;
-  }
-  .switch-mode-link:hover {
-  color: #3B82F6; /* Blue hover for link */
-  }
-  .loading-text {
-  color: #94A3B8;
+}
+
+.switch-mode-link:hover {
+  color: #3b82f6;
+}
+
+/* ===================================================
+   📱 RESPONSIVE DESIGN
+   =================================================== */
+
+/* Small screens */
+@media (max-width: 600px) {
+  .header {
+    padding: 15px 20px;
   }
 
+  .header-top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
 
+  .logo {
+    font-size: 1.6rem;
+    text-align: center;
+  }
+
+  .search-bar {
+    width: 100%;
+    padding: 6px 10px;
+  }
+
+  .search-button {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+
+  .header-right {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .login-text {
+    font-size: 1rem;
+  }
+
+  .language-select {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+
+  .nav-buttons {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px 0;
+  }
+
+  .nav-button {
+    font-size: 15px;
+    padding: 8px 12px;
+  }
+
+  .cards-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .card {
+    flex: 1 1 90%;
+  }
+
+  .card img {
+    height: 160px;
+  }
+
+  .card-body {
+    padding: 10px;
+  }
+
+  .signup-card,
+  .auth-card {
+    width: 90%;
+    padding: 1.8rem 1.2rem;
+  }
+
+  .signup-title {
+    font-size: 1.5rem;
+  }
+
+  .signup-subtitle,
+  .header-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .form-input,
+  .submit-button {
+    font-size: 0.9rem;
+    padding: 0.7rem;
+  }
+
+  .signup-container,
+  .app-container {
+    padding: 1rem;
+  }
+}
+
+/* Medium screens */
+@media (min-width: 601px) and (max-width: 900px) {
+  .header-top {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .search-bar {
+    width: 80%;
+  }
+
+  .nav-buttons {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .card {
+    flex: 1 1 45%;
+  }
+
+  .signup-card,
+  .auth-card {
+    width: 80%;
+  }
+}
+
+/* Large screens */
+@media (min-width: 901px) {
+  .cards-container {
+    justify-content: flex-start;
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
+  .card {
+    flex: 1 1 300px;
+    max-width: 320px;
+  }
+}
