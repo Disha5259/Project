@@ -51,7 +51,7 @@ body {
   background-color: #393646;
   border-radius: 30px;
   padding: 6px 12px;
-  width: 44%;
+  width: 43%;
 }
 
 .search-input {
@@ -133,7 +133,7 @@ body {
   border: none;
   padding: 10px 15px;
   border-radius: 25px;
-  font-size: 18px;
+  font-size: 20px;
   cursor: pointer;
   transition: background 0.3s ease;
 }

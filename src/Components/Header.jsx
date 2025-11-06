@@ -3,6 +3,8 @@ import { FaUserCircle } from "react-icons/fa";
 import Card from "./Card";
 import { translateText } from "./utils";
 import { useNavigate } from "react-router-dom";
+import { auth } from "./FirebaseConfig";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 const API_KEY = "0e60539765174dfea87fc50c1d37dbd7";
 
@@ -17,19 +19,31 @@ const LANG_CONFIG = {
   es: { tl: "es" },
 };
 
-const Header = ({
-  elevenApiKey,
-  voiceMap,
-  isLoggedIn = false,
-  onLoginClick,
-  onLogoutClick,
-}) => {
+const Header = ({ elevenApiKey, voiceMap, language, setLanguage }) => {
   const [search, setSearch] = useState("india");
   const [newsData, setNewsData] = useState([]);
-  const [language, setLanguage] = useState("en");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
+
   const navigate = useNavigate();
+
+  // ✅ Track login/logout using Firebase Auth
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // ✅ Force reload to get latest profile info
+        await user.reload();
+        setIsLoggedIn(true);
+        setUserName(user.displayName || user.email.split("@")[0]);
+      } else {
+        setIsLoggedIn(false);
+        setUserName("");
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     fetchNews(search);
@@ -45,7 +59,9 @@ const Header = ({
     setError(null);
     try {
       const res = await fetch(
-        `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&pageSize=20&apiKey=${API_KEY}`
+        `https://newsapi.org/v2/everything?q=${encodeURIComponent(
+          query
+        )}&pageSize=20&apiKey=${API_KEY}`
       );
       const json = await res.json();
       if (json.status !== "ok") {
@@ -77,22 +93,18 @@ const Header = ({
     setLoading(true);
     setError(null);
     try {
-      const TOP_N = Math.min(10, newsData.length);
       const translated = await Promise.all(
-        newsData.map(async (article, idx) => {
+        newsData.map(async (article) => {
           const origTitle = article.originalTitle || article.title;
           const origDesc = article.originalDescription || article.description;
+          const target = LANG_CONFIG[targetLang]?.tl || targetLang;
 
-          if (idx >= TOP_N)
-            return {
-              ...article,
-              originalTitle: origTitle,
-              originalDescription: origDesc,
-            };
+          const [tTitle, tDesc] = await Promise.all([
+            translateText(origTitle || "", target),
+            translateText(origDesc || "", target),
+          ]);
 
-          const target = LANG_CONFIG[targetLang].tl || targetLang;
-          const tTitle = await translateText(origTitle || "", target);
-          const tDesc = await translateText(origDesc || "", target);
+          await new Promise((r) => setTimeout(r, 80));
 
           return {
             ...article,
@@ -103,6 +115,7 @@ const Header = ({
           };
         })
       );
+
       setNewsData(translated);
     } catch (err) {
       console.error("translateArticles error:", err);
@@ -110,6 +123,12 @@ const Header = ({
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    setIsLoggedIn(false);
+    setUserName("");
   };
 
   return (
@@ -134,9 +153,14 @@ const Header = ({
 
           {/* Right Section */}
           <div className="header-right">
-            <div className="login-section" onClick={onLoginClick || (() => navigate("/login"))}>
+            <div
+              className="login-section"
+              onClick={isLoggedIn ? handleLogout : () => navigate("/login")}
+            >
               <FaUserCircle className="login-icon" />
-              <span className="login-text">Login</span>
+              <span className="login-text">
+                {isLoggedIn ? userName : "Login"}
+              </span>
             </div>
 
             <select

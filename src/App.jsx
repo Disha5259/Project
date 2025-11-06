@@ -1,88 +1,90 @@
-import React, { useState } from "react";
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import Header from "./Components/Header";
-import Card from "./Components/Card";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
-import Feedbackform from "./Components/Feedbackform"; 
-import "./index.css";
 
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
-const ELEVEN_API_KEY = "sk_de875e75b1b01464dc9ff094474cb09f4fc7a5e8a84691c5";
+import { auth} from "./Components/FirebaseConfig";
 
-const VOICE_MAP = {
-en: "21m00Tcm4TlvDq8ikWAM",
-hi: "hi_voice_id_placeholder",
-pa: "pa_voice_id_placeholder",
-gu: "gu_voice_id_placeholder",
-ta: "ta_voice_id_placeholder",
-};
+function AppContent() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [language, setLanguage] = useState("en");
+  const location = useLocation();
+  const navigate = useNavigate();
 
-const AppContent = () => {  
-const location = useLocation();
-const navigate = useNavigate();
-
-const [language, setLanguage] = useState("en");
-const [newsData, setNewsData] = useState([]);
-const [isLoggedIn, setIsLoggedIn] = useState(false); // ✅ track login
-
-const hideHeader = location.pathname === "/login" || location.pathname === "/signup";
-
-const handleNavigate = (path) => {
-navigate(path);
-};
-
-const handleLogout = () => {
-setIsLoggedIn(false);
-navigate("/"); // redirect to home after logout
-};
-
-return (
-<div className="app">
-{!hideHeader && (
-<Header
-language={language}
-setLanguage={setLanguage}
-newsData={newsData}
-setNewsData={setNewsData}
-elevenApiKey={ELEVEN_API_KEY}
-voiceMap={VOICE_MAP}
-onLoginClick={() => handleNavigate("/login")}
-onSignupClick={() => handleNavigate("/signup")}
-onLogoutClick={handleLogout}
-isLoggedIn={isLoggedIn}
-/>
-)}
-
-  <Routes>
-    <Route
-      path="/"
-      element={
-        <Card
-          data={newsData}
-          language={language}
-          elevenApiKey={ELEVEN_API_KEY}
-          voiceMap={VOICE_MAP}
-        />
+  useEffect(() => {
+    console.log("✅ Setting up Firebase Auth listener...");
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log("🔥 Auth listener triggered. User:", user);
+      if (user) {
+        console.log("✅ User logged in:", user.email);
+        setIsLoggedIn(true);
+      } else {
+        console.log("🚪 User logged out or not found");
+        setIsLoggedIn(false);
       }
-    />
-    <Route
-      path="/login"
-      element={<Login onLoginSuccess={() => setIsLoggedIn(true)} />}
-    />
-    <Route path="/signup" element={<Signup />} />
-  </Routes>
-</div>
+    });
+    return () => unsubscribe();
+  }, []);
 
+  const hideHeader =
+    location.pathname === "/login" || location.pathname === "/signup";
 
-);
-};
+  const handleLogout = async () => {
+    console.log("🚨 Logging out...");
+    await signOut(auth);
+    setIsLoggedIn(false);
+    navigate("/");
+  };
 
-const App = () => (
-<BrowserRouter>
-<AppContent />
-<Feedbackform/>
-</BrowserRouter>
-);
+  return (
+    <div>
+      {!hideHeader && (
+        <Header
+          key={isLoggedIn ? "loggedin" : "loggedout"} // force rerender
+          isLoggedIn={isLoggedIn}
+          onLogoutClick={handleLogout}
+          onLoginClick={() => navigate("/login")}
+          language={language}
+          setLanguage={setLanguage}
+        />
+      )}
 
-export default App;
+      <Routes>
+        <Route
+          path="/"
+          element={<div className="text-center p-8"></div>}
+        />
+        <Route
+          path="/login"
+          element={
+            <Login
+              onLoginSuccess={() => {
+                console.log("✅ Login success callback triggered");
+                navigate("/");
+              }}
+            />
+          }
+        />
+        <Route path="/signup" element={<Signup />} />
+      </Routes>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
+  );
+}
+
